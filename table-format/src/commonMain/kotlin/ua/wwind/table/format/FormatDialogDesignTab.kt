@@ -42,7 +42,6 @@ public fun <E : Enum<E>, FILTER> FormatDialogDesignTab(
                 onChange(item.copy(cellStyle = item.cellStyle.copy(textStyle = value)))
             },
             modifier = Modifier.fillMaxWidth(),
-            scrollbarRenderer = scrollbarRenderer,
         )
         FormatColorField(
             color = item.cellStyle.contentColor?.toColor(),
@@ -76,7 +75,6 @@ public fun <E : Enum<E>, FILTER> FormatDialogDesignTab(
                 onChange(item.copy(cellStyle = item.cellStyle.copy(vertical = value)))
             },
             modifier = Modifier.fillMaxWidth(),
-            scrollbarRenderer = scrollbarRenderer,
         )
         FormatDropdownField(
             currentValue = item.cellStyle.horizontal,
@@ -89,7 +87,6 @@ public fun <E : Enum<E>, FILTER> FormatDialogDesignTab(
                 onChange(item.copy(cellStyle = item.cellStyle.copy(horizontal = value)))
             },
             modifier = Modifier.fillMaxWidth(),
-            scrollbarRenderer = scrollbarRenderer,
         )
     }
 }

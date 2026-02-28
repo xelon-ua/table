@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Close
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.rounded.DragIndicator
 import androidx.compose.material.icons.rounded.Save
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -60,22 +62,13 @@ import sh.calvin.reorderable.rememberReorderableLazyListState
 import ua.wwind.table.format.component.FormatDialogTabRow
 import ua.wwind.table.format.component.RuleTab
 import ua.wwind.table.format.component.TabData
+import ua.wwind.table.format.data.EditFormatRule
+import ua.wwind.table.format.data.FormatDialogSettings
 import ua.wwind.table.format.data.TableFormatRule
 import ua.wwind.table.format.scrollbar.VerticalScrollbarRenderer
 import ua.wwind.table.format.scrollbar.VerticalScrollbarState
 import ua.wwind.table.strings.StringProvider
 import ua.wwind.table.strings.UiString
-
-private data class EditFormatRule<E : Enum<E>, FILTER>(
-    val index: Int,
-    val item: TableFormatRule<E, FILTER>,
-    val isNew: Boolean = false,
-)
-
-public data class FormatDialogSettings(
-    val copiedItemHighlightDuration: Long = 3000,
-    val copiedItemHighlightColor: Color = Color.Unspecified,
-)
 
 @OptIn(FlowPreview::class)
 @Composable
@@ -107,12 +100,31 @@ public fun <E : Enum<E>, FILTER> FormatDialog(
     AlertDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = spacedBy(16.dp, Alignment.End),
-            ) {
-                editItem?.let { (index, item, isNew) ->
+            if (editItem == null) {
+                FloatingActionButton(
+                    onClick = {
+                        val id = rules.maxByOrNull { it.id }?.id?.inc() ?: 0L
+                        editItem =
+                            EditFormatRule(
+                                rules.lastIndex + 1,
+                                getNewRule(id),
+                                true,
+                            )
+                    },
+                    shape = CircleShape,
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = "Add",
+                    )
+                }
+            }
+            editItem?.let { (index, item, isNew) ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = spacedBy(16.dp, Alignment.End),
+                ) {
                     if (!isNew) {
                         IconButton(
                             onClick = {
@@ -194,14 +206,11 @@ public fun <E : Enum<E>, FILTER> FormatDialog(
                 )
                 if (editItem == null) {
                     IconButton(
-                        onClick = {
-                            val id = rules.maxByOrNull { it.id }?.id?.inc() ?: 0L
-                            editItem = EditFormatRule(rules.lastIndex + 1, getNewRule(id), true)
-                        },
+                        onClick = onDismissRequest,
                     ) {
                         Icon(
-                            imageVector = Icons.Rounded.Add,
-                            contentDescription = "Add",
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = "Сlose",
                         )
                     }
                 }
