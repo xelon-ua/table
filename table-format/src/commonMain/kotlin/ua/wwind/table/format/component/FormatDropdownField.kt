@@ -5,7 +5,6 @@ import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -29,8 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import ua.wwind.table.filter.component.collectAsEffect
-import ua.wwind.table.format.scrollbar.VerticalScrollbarRenderer
-import ua.wwind.table.format.scrollbar.VerticalScrollbarState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongParameterList", "LongMethod")
@@ -45,7 +42,6 @@ internal fun <E : Enum<E>> FormatDropdownField(
     modifier: Modifier = Modifier,
     checked: ((E) -> Boolean)? = null,
     enabled: Boolean = true,
-    scrollbarRenderer: VerticalScrollbarRenderer? = null,
 ) {
     val scrollState = rememberScrollState()
     var expanded by remember { mutableStateOf(false) }
@@ -123,10 +119,6 @@ internal fun <E : Enum<E>> FormatDropdownField(
                         )
                     }
                 }
-                scrollbarRenderer?.Render(
-                    modifier = Modifier.align(Alignment.TopEnd).fillMaxHeight(),
-                    state = VerticalScrollbarState.Scroll(scrollState),
-                )
             }
         }
     }
